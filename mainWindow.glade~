@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkWindow">
+  <object class="GtkWindow" id="mainWindow">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="default_width">500</property>
@@ -267,6 +267,8 @@
                   <object class="GtkBox" id="bloqueBotones">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
                     <property name="margin_bottom">10</property>
                     <property name="homogeneous">True</property>
                     <child>
@@ -746,6 +748,8 @@
                   <object class="GtkBox" id="bloqueBotonesProducto">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
                     <property name="margin_bottom">10</property>
                     <property name="homogeneous">True</property>
                     <child>
@@ -814,8 +818,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkGrid" id="bloqueNuevoCliente1">
+                  <object class="GtkGrid" id="bloqueNuevoProducto">
                     <property name="can_focus">False</property>
+                    <property name="margin_bottom">10</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -972,10 +977,32 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkFrame" id="frameVentas">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="label_item">
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
         </child>
         <child type="tab">
-          <placeholder/>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Ventas</property>
+          </object>
+          <packing>
+            <property name="position">2</property>
+            <property name="tab_fill">False</property>
+          </packing>
         </child>
       </object>
     </child>
