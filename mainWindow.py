@@ -9,7 +9,9 @@ class FiestraPrincipal ():
     def __init__(self):
 
         self.controlBloqueCliente = False
+        self.editarCliente = False
         self.controlBloqueProducto = False
+
         self.bbdd = dbapi2.connect("bbdd.dat")
         self.cursor = self.bbdd.cursor()
 
@@ -34,7 +36,9 @@ class FiestraPrincipal ():
         addClienteButton = builder.get_object("botonAñadir")
         addClienteButton.connect("clicked", self.on_addClienteButton_clicked)
         editClienteButton = builder.get_object("botonEditar")
+        editClienteButton.connect("clicked", self.on_editClienteButton_clicked)
         removeClienteButton = builder.get_object("botonEliminar")
+        removeClienteButton.connect("clicked", self.on_removeClienteButton_clicked)
         applyClienteButton = builder.get_object("botonAplicar")
         applyClienteButton.connect("clicked", self.on_applyClienteButton_clicked)
 
@@ -69,7 +73,47 @@ class FiestraPrincipal ():
             self.newClienteBlock.set_visible(True)
         else:
             self.controlBloqueCliente = False
+            self.editarCliente = False
             self.newClienteBlock.set_visible(False)
+
+    def on_editClienteButton_clicked (self, control):
+        if (self.controlBloqueCliente == False):
+            self.controlBloqueCliente = True
+            cliente = self.cursor.execute("select * from clientes where dni='" + self.comboClientes.get_active_text().split(" - ")[0] + "'")
+            for dato in cliente:
+                self.editarCliente = True
+                self.nombreNuevoCliente.set_text(dato[0])
+                self.dniNuevoCliente.set_text(dato[1])
+                self.fechaNuevoCliente.set_text(dato[2])
+                self.direccionNuevoCliente.set_text(dato[3])
+                self.telefonoNuevoCliente.set_text(str(dato[4]))
+                self.emailNuevoCliente.set_text(dato[5])
+            self.newClienteBlock.set_visible(True)
+        else:
+            self.controlBloqueCliente = False
+            self.editarCliente = False
+            self.newClienteBlock.set_visible(False)
+            self.nombreNuevoCliente.set_text("")
+            self.dniNuevoCliente.set_text("")
+            self.fechaNuevoCliente.set_text("")
+            self.direccionNuevoCliente.set_text("")
+            self.telefonoNuevoCliente.set_text("")
+            self.emailNuevoCliente.set_text("")
+
+    def on_removeClienteButton_clicked (self, control):
+        if (self.comboClientes.get_active() >= 0):
+            try:
+                self.cursor.execute("delete from clientes where dni='" + self.comboClientes.get_active_text().split(" - ")[0] + "'")
+                self.bbdd.commit()
+            except:
+                print("Error al borrar el usuario de la tabla.")
+            self.comboClientes.remove(self.comboClientes.get_active())
+            self.nombreCliente.set_text("")
+            self.dniCliente.set_text("")
+            self.fechaCliente.set_text("")
+            self.direccionCliente.set_text("")
+            self.telefonoCliente.set_text("")
+            self.emailCliente.set_text("")
 
     def on_applyClienteButton_clicked(self, control):
         nombre = self.nombreNuevoCliente.get_text()
@@ -78,28 +122,33 @@ class FiestraPrincipal ():
         direccion = self.direccionNuevoCliente.get_text()
         telefono = self.telefonoNuevoCliente.get_text()
         email = self.emailNuevoCliente.get_text()
-        if dni and nombre and fecha and direccion and telefono and email:
-            self.cursor.execute("insert into clientes values ('" + dni + "', '" + nombre + "', '" + fecha + "', '" + direccion + "', " + telefono + ", '" + email + "')")
+        # Si es falso se trata de una inserción:
+        if (self.editarCliente == False):
+            if dni and nombre and fecha and direccion and telefono and email:
+                self.cursor.execute("insert into clientes values ('" + dni + "', '" + nombre + "', '" + fecha + "', '" + direccion + "', " + telefono + ", '" + email + "')")
+                self.bbdd.commit()
+                self.newClienteBlock.set_visible(False)
+                self.limpiarComboBoxClientesEmergentes()
+
+        else:
+            self.cursor.execute("update clientes set dni = '" + dni + "', nombre = '" + nombre + "', nacimiento = '" + fecha + "', direccion = '" + direccion + "', telefono = " + telefono + ", email = '" + email + "' where dni='" + self.comboClientes.get_active_text().split(" - ")[0] + "'")
             self.bbdd.commit()
             self.newClienteBlock.set_visible(False)
-            # Se limpian los campos:
-            self.nombreNuevoCliente.set_text("")
-            self.dniNuevoCliente.set_text("")
-            self.fechaNuevoCliente.set_text("")
-            self.direccionNuevoCliente.set_text("")
-            self.telefonoNuevoCliente.set_text("")
-            self.emailNuevoCliente.set_text("")
+            self.limpiarComboBoxClientesEmergentes()
 
     def on_comboClientes_changed(self, combo):
         texto = combo.get_active_text()
-        cliente = self.cursor.execute("select * from clientes where dni='" + texto.split(" - ")[0] + "'")
-        for dato in cliente:
-            self.nombreCliente.set_text(dato[0])
-            self.dniCliente.set_text(dato[1])
-            self.fechaCliente.set_text(dato[2])
-            self.direccionCliente.set_text(dato[3])
-            self.telefonoCliente.set_text(str(dato[4]))
-            self.emailCliente.set_text(dato[5])
+        try:
+            cliente = self.cursor.execute("select * from clientes where dni='" + texto.split(" - ")[0] + "'")
+            for dato in cliente:
+                self.nombreCliente.set_text(dato[0])
+                self.dniCliente.set_text(dato[1])
+                self.fechaCliente.set_text(dato[2])
+                self.direccionCliente.set_text(dato[3])
+                self.telefonoCliente.set_text(str(dato[4]))
+                self.emailCliente.set_text(dato[5])
+        except AttributeError:
+            print("No hay ningún item seleccionado.")
 
     def on_addProductoButton_clicked (self, control):
         if (self.controlBloqueProducto == False):
@@ -108,6 +157,20 @@ class FiestraPrincipal ():
         else:
             self.controlBloqueProducto = False
             self.newProductoBlock.set_visible(False)
+
+    def limpiarComboBoxClientesEmergentes(self):
+        # Se limpian los campos:
+        self.nombreNuevoCliente.set_text("")
+        self.dniNuevoCliente.set_text("")
+        self.fechaNuevoCliente.set_text("")
+        self.direccionNuevoCliente.set_text("")
+        self.telefonoNuevoCliente.set_text("")
+        self.emailNuevoCliente.set_text("")
+        # Se recarga el ComboBox para añadir el nuevo cliente:
+        self.comboClientes.remove_all()
+        clientes = self.cursor.execute("select dni, nombre from clientes")
+        for cliente in clientes:
+            self.comboClientes.append_text(cliente[0] + " - " + cliente[1])
 
 if __name__ == "__main__":
     FiestraPrincipal()
