@@ -11,6 +11,7 @@ class FiestraPrincipal ():
         self.controlBloqueCliente = False
         self.editarCliente = False
         self.controlBloqueProducto = False
+        self.editarProducto = False
 
         self.bbdd = dbapi2.connect("bbdd.dat")
         self.cursor = self.bbdd.cursor()
@@ -31,8 +32,12 @@ class FiestraPrincipal ():
             self.comboClientes.append_text(cliente[0] + " - " + cliente[1])
         self.comboClientes.connect("changed", self.on_comboClientes_changed)
         self.comboProductos = builder.get_object("cbListaProductos")
+        productos = self.cursor.execute("select referencia, descripcion from productos")
+        for cliente in clientes:
+            self.comboProductos.append_text(cliente[0] + " - " + cliente[1])
+        self.comboProductos.connect("changed", self.on_comboProductos_changed)
 
-        # Botones:
+        # Botones Cliente:
         addClienteButton = builder.get_object("botonAñadir")
         addClienteButton.connect("clicked", self.on_addClienteButton_clicked)
         editClienteButton = builder.get_object("botonEditar")
@@ -42,13 +47,17 @@ class FiestraPrincipal ():
         applyClienteButton = builder.get_object("botonAplicar")
         applyClienteButton.connect("clicked", self.on_applyClienteButton_clicked)
 
+        # Botones Producto:
         addProductoButton = builder.get_object("botonAñadirProducto")
         addProductoButton.connect("clicked", self.on_addProductoButton_clicked)
         editProductoButton = builder.get_object("botonEditarProducto")
+        editProductoButton.connect("clicked", self.on_editProductoButton_clicked)
         removeProductoButton = builder.get_object("botonEliminarProducto")
+        removeProductoButton.connect("clicked", self.on_removeProductoButton_clicked)
         applyProductoButton = builder.get_object("botonAplicarProducto")
+        applyProductoButton.connect("clicked", self.on_applyProductoButton_clicked)
 
-        # Componentes bloque emergente Cliente:
+        # Componentes bloque permanente Cliente:
         self.nombreCliente = builder.get_object("nombreClienteText")
         self.dniCliente = builder.get_object("dniClienteText")
         self.fechaCliente = builder.get_object("fechaClienteText")
@@ -63,6 +72,18 @@ class FiestraPrincipal ():
         self.direccionNuevoCliente = builder.get_object("direccionNuevoCliente")
         self.telefonoNuevoCliente = builder.get_object("telefonoNuevoCliente")
         self.emailNuevoCliente = builder.get_object("emailNuevoCliente")
+
+        # Componentes bloque permanente Producto:
+        self.referenciaProducto = builder.get_object("referenciaProductoText")
+        self.descripcionProducto = builder.get_object("descripcionProductoText")
+        self.stockProducto = builder.get_object("stockProductoText")
+        self.precioProducto = builder.get_object("precioProductoText")
+
+        # Componentes bloque emergente Producto:
+        self.referenciaNuevoProducto = builder.get_object("referenciaNuevoProducto")
+        self.descripcionNuevoProducto = builder.get_object("descripcionNuevoProducto")
+        self.stockNuevoProducto = builder.get_object("stockNuevoProducto")
+        self.precioNuevoProducto = builder.get_object("precioNuevoProducto")
 
         mainWindow.show()
 
@@ -150,14 +171,6 @@ class FiestraPrincipal ():
         except AttributeError:
             print("No hay ningún item seleccionado.")
 
-    def on_addProductoButton_clicked (self, control):
-        if (self.controlBloqueProducto == False):
-            self.controlBloqueProducto = True
-            self.newProductoBlock.set_visible(True)
-        else:
-            self.controlBloqueProducto = False
-            self.newProductoBlock.set_visible(False)
-
     def limpiarComboBoxClientesEmergentes(self):
         # Se limpian los campos:
         self.nombreNuevoCliente.set_text("")
@@ -171,6 +184,95 @@ class FiestraPrincipal ():
         clientes = self.cursor.execute("select dni, nombre from clientes")
         for cliente in clientes:
             self.comboClientes.append_text(cliente[0] + " - " + cliente[1])
+
+    def on_addProductoButton_clicked (self, control):
+        if (self.controlBloqueProducto == False):
+            self.controlBloqueProducto = True
+            self.newProductoBlock.set_visible(True)
+        else:
+            self.controlBloqueProducto = False
+            self.newProductoBlock.set_visible(False)
+
+    def on_editProductoButton_clicked (self, control):
+        if (self.controlBloqueProducto == False):
+            self.controlBloqueProducto = True
+            producto = self.cursor.execute(
+                "select * from productos where referencia='" + self.comboProductos.get_active_text().split(" - ")[0] + "'")
+            for dato in producto:
+                self.editarProducto = True
+                self.referenciaNuevoProducto.set_text(dato[0])
+                self.descripcionNuevoProducto.set_text(dato[1])
+                self.stockNuevoProducto.set_text(str(dato[2]))
+                self.precioNuevoProducto.set_text(str(dato[3]))
+            self.newProductoBlock.set_visible(True)
+        else:
+            self.controlBloqueProducto = False
+            self.editarProducto = False
+            self.newProductoBlock.set_visible(False)
+            self.referenciaNuevoProducto.set_text("")
+            self.descripcionNuevoProducto.set_text("")
+            self.stockNuevoProducto.set_text("")
+            self.precioNuevoProducto.set_text("")
+
+    def on_removeProductoButton_clicked (self, control):
+        if (self.comboProductos.get_active() >= 0):
+            try:
+                self.cursor.execute(
+                    "delete from productos where referencia='" + self.comboProductos.get_active_text().split(" - ")[0] + "'")
+                self.bbdd.commit()
+            except:
+                print("Error al borrar el producto de la tabla.")
+            self.comboClientes.remove(self.comboClientes.get_active())
+            self.referenciaProducto.set_text("")
+            self.descripcionProducto.set_text("")
+            self.stockProducto.set_text("")
+            self.precioProducto.set_text("")
+
+    def on_applyProductoButton_clicked (self, control):
+        referencia = self.referenciaNuevoProducto.get_text()
+        descripcion = self.descripcionNuevoProducto.get_text()
+        stock = self.stockNuevoProducto.get_text()
+        precio = self.precioNuevoProducto.get_text()
+        # Si es falso se trata de una inserción:
+        if (self.editarProducto == False):
+            if referencia and descripcion and stock and precio:
+                self.cursor.execute(
+                    "insert into productos values ('" + referencia + "', '" + descripcion + "', " + stock + ", " + precio + ")")
+                self.bbdd.commit()
+                self.newProductoBlock.set_visible(False)
+                self.limpiarComboBoxProductosEmergentes()
+
+        else:
+            self.cursor.execute(
+                "update productos set referencia = '" + referencia + "', descripcion = '" + descripcion + "', stock = " + stock + ", precio = " + precio + " where referencia='" +
+                self.comboProductos.get_active_text().split(" - ")[0] + "'")
+            self.bbdd.commit()
+            self.newProductoBlock.set_visible(False)
+            self.limpiarComboBoxProductosEmergentes()
+
+    def on_comboProductos_changed(self, combo):
+        texto = combo.get_active_text()
+        try:
+            producto = self.cursor.execute("select * from productos where referencia='" + texto.split(" - ")[0] + "'")
+            for dato in producto:
+                self.referenciaProducto.set_text(dato[0])
+                self.descripcionProducto.set_text(dato[1])
+                self.stockProducto.set_text(str(dato[2]))
+                self.precioProducto.set_text(str(dato[3]))
+        except AttributeError:
+            print("No hay ningún item seleccionado.")
+
+    def limpiarComboBoxProductosEmergentes(self):
+        # Se limpian los campos:
+        self.referenciaNuevoProducto.set_text("")
+        self.descripcionNuevoProducto.set_text("")
+        self.stockNuevoProducto.set_text("")
+        self.precioNuevoProducto.set_text("")
+        # Se recarga el ComboBox para añadir el nuevo cliente:
+        self.comboProductos.remove_all()
+        productos = self.cursor.execute("select referencia, descripcion from productos")
+        for producto in productos:
+            self.comboProductos.append_text(producto[0] + " - " + producto[1])
 
 if __name__ == "__main__":
     FiestraPrincipal()
