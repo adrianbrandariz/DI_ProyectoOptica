@@ -47,6 +47,12 @@ class FiestraPrincipal ():
         productos = self.cursor.execute("select referencia, descripcion from productos")
         for producto in productos:
             self.comboVentaProducto.append_text(producto[0] + " - " + producto[1])
+        self.comboVentaCantidad = builder.get_object("comboVentaCantidad")
+        self.comboVentaCantidad.append_text("1")
+        self.comboVentaCantidad.append_text("2")
+        self.comboVentaCantidad.append_text("3")
+        self.comboVentaCantidad.append_text("4")
+        self.comboVentaCantidad.append_text("5")
 
         # Botones Cliente:
         addClienteButton = builder.get_object("botonAñadir")
@@ -71,7 +77,8 @@ class FiestraPrincipal ():
         # Botones Venta:
         newSale = builder.get_object("nuevaVentaButton")
         newSale.connect("clicked", self.on_newSale_clicked)
-        addNewProductToSale = builder.get_object("nuevVentaProducto")
+        addNewProductToSale = builder.get_object("nuevaVentaProducto")
+        addNewProductToSale.connect("clicked", self.on_addNewProductToSale)
 
         # Componentes bloque permanente Cliente:
         self.nombreCliente = builder.get_object("nombreClienteText")
@@ -103,7 +110,6 @@ class FiestraPrincipal ():
 
         # Componentes bloque Ventas:
         self.indicadorVenta = builder.get_object("indicadorVenta")
-        self.boxTreeView = builder.get_object("boxTreeView")
 
         mainWindow.show()
 
@@ -301,6 +307,12 @@ class FiestraPrincipal ():
     def on_newSale_clicked(self, control):
         self.generarNuevoIndicadorVenta()
 
+    def on_addNewProductToSale(self, control):
+        if (self.comboVentaCantidad.get_active() > -1 and self.comboVentaProducto.get_active() > -1):
+            self.comboVentaCliente.set_sensitive(False)
+            self.comboVentaProducto.set_active(-1)
+            self.comboVentaCantidad.set_active(-1)
+
     def generarNuevoIndicadorVenta(self):
         indicadores = self.cursor.execute("select indicador from ventas")
         aux = "V"
@@ -308,6 +320,9 @@ class FiestraPrincipal ():
         for indicador in indicadores:
             nuevoIndicador = aux + str(int(indicador[0].replace("V", "")) + 1)
         self.indicadorVenta.set_text(nuevoIndicador)
+        self.comboVentaCliente.set_sensitive(True)
+        self.comboVentaProducto.set_sensitive(True)
+        self.comboVentaCantidad.set_sensitive(True )
 
     def cargarCombosVentas(self):
         self.comboVentaCliente.remove_all()

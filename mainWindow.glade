@@ -1110,6 +1110,7 @@
                     <child>
                       <object class="GtkComboBoxText" id="comboVentaCliente">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">10</property>
                         <property name="margin_right">10</property>
@@ -1166,6 +1167,7 @@
                     <child>
                       <object class="GtkComboBoxText" id="comboVentaProducto">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">10</property>
                         <property name="margin_right">10</property>
@@ -1175,6 +1177,20 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="comboVentaCantidad">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_left">10</property>
+                        <property name="margin_right">10</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1190,7 +1206,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
@@ -1221,6 +1237,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">10</property>
                     <property name="margin_right">10</property>
+                    <property name="margin_bottom">10</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <placeholder/>
