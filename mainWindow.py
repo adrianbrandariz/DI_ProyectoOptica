@@ -8,14 +8,17 @@ class FiestraPrincipal ():
 
     def __init__(self):
 
+        # Variables de tipo boolean para el control de la interfaz:
         self.controlBloqueCliente = False
         self.editarCliente = False
         self.controlBloqueProducto = False
         self.editarProducto = False
 
+        # La base de datos y el cursor que se emplea para manejar los datos:
         self.bbdd = dbapi2.connect("bbdd.dat")
         self.cursor = self.bbdd.cursor()
 
+        # Se recibe la GUI desde un archivo .glade:
         builder = Gtk.Builder()
         builder.add_from_file ("mainWindow.glade")
 
@@ -33,9 +36,17 @@ class FiestraPrincipal ():
         self.comboClientes.connect("changed", self.on_comboClientes_changed)
         self.comboProductos = builder.get_object("cbListaProductos")
         productos = self.cursor.execute("select referencia, descripcion from productos")
-        for cliente in clientes:
-            self.comboProductos.append_text(cliente[0] + " - " + cliente[1])
+        for producto in productos:
+            self.comboProductos.append_text(producto[0] + " - " + producto[1])
         self.comboProductos.connect("changed", self.on_comboProductos_changed)
+        self.comboVentaCliente = builder.get_object("comboVentaCliente")
+        clientes = self.cursor.execute("select dni, nombre from clientes")
+        for cliente in clientes:
+            self.comboVentaCliente.append_text(cliente[0] + " - " + cliente[1])
+        self.comboVentaProducto = builder.get_object("comboVentaProducto")
+        productos = self.cursor.execute("select referencia, descripcion from productos")
+        for producto in productos:
+            self.comboVentaProducto.append_text(producto[0] + " - " + producto[1])
 
         # Botones Cliente:
         addClienteButton = builder.get_object("botonAñadir")
@@ -56,6 +67,11 @@ class FiestraPrincipal ():
         removeProductoButton.connect("clicked", self.on_removeProductoButton_clicked)
         applyProductoButton = builder.get_object("botonAplicarProducto")
         applyProductoButton.connect("clicked", self.on_applyProductoButton_clicked)
+
+        # Botones Venta:
+        newSale = builder.get_object("nuevaVentaButton")
+        newSale.connect("clicked", self.on_newSale_clicked)
+        addNewProductToSale = builder.get_object("nuevVentaProducto")
 
         # Componentes bloque permanente Cliente:
         self.nombreCliente = builder.get_object("nombreClienteText")
@@ -84,6 +100,10 @@ class FiestraPrincipal ():
         self.descripcionNuevoProducto = builder.get_object("descripcionNuevoProducto")
         self.stockNuevoProducto = builder.get_object("stockNuevoProducto")
         self.precioNuevoProducto = builder.get_object("precioNuevoProducto")
+
+        # Componentes bloque Ventas:
+        self.indicadorVenta = builder.get_object("indicadorVenta")
+        self.boxTreeView = builder.get_object("boxTreeView")
 
         mainWindow.show()
 
@@ -126,6 +146,7 @@ class FiestraPrincipal ():
             try:
                 self.cursor.execute("delete from clientes where dni='" + self.comboClientes.get_active_text().split(" - ")[0] + "'")
                 self.bbdd.commit()
+                self.limpiarComboBoxClientesEmergentes()
             except:
                 print("Error al borrar el usuario de la tabla.")
             self.comboClientes.remove(self.comboClientes.get_active())
@@ -172,6 +193,7 @@ class FiestraPrincipal ():
             print("No hay ningún item seleccionado.")
 
     def limpiarComboBoxClientesEmergentes(self):
+        self.cargarCombosVentas()
         # Se limpian los campos:
         self.nombreNuevoCliente.set_text("")
         self.dniNuevoCliente.set_text("")
@@ -220,6 +242,7 @@ class FiestraPrincipal ():
                 self.cursor.execute(
                     "delete from productos where referencia='" + self.comboProductos.get_active_text().split(" - ")[0] + "'")
                 self.bbdd.commit()
+                self.limpiarComboBoxProductosEmergentes()
             except:
                 print("Error al borrar el producto de la tabla.")
             self.comboClientes.remove(self.comboClientes.get_active())
@@ -263,6 +286,7 @@ class FiestraPrincipal ():
             print("No hay ningún item seleccionado.")
 
     def limpiarComboBoxProductosEmergentes(self):
+        self.cargarCombosVentas()
         # Se limpian los campos:
         self.referenciaNuevoProducto.set_text("")
         self.descripcionNuevoProducto.set_text("")
@@ -273,6 +297,29 @@ class FiestraPrincipal ():
         productos = self.cursor.execute("select referencia, descripcion from productos")
         for producto in productos:
             self.comboProductos.append_text(producto[0] + " - " + producto[1])
+
+    def on_newSale_clicked(self, control):
+        self.generarNuevoIndicadorVenta()
+
+    def generarNuevoIndicadorVenta(self):
+        indicadores = self.cursor.execute("select indicador from ventas")
+        aux = "V"
+        nuevoIndicador = "V1"
+        for indicador in indicadores:
+            nuevoIndicador = aux + str(int(indicador[0].replace("V", "")) + 1)
+        self.indicadorVenta.set_text(nuevoIndicador)
+
+    def cargarCombosVentas(self):
+        self.comboVentaCliente.remove_all()
+        clientes = self.cursor.execute("select dni, nombre from clientes")
+        for cliente in clientes:
+            self.comboVentaCliente .append_text(cliente[0] + " - " + cliente[1])
+        self.comboVentaProducto.remove_all()
+        productos = self.cursor.execute("select referencia, descripcion from productos")
+        for producto in productos:
+            self.comboVentaProducto.append_text(producto[0] + " - " + producto[1])
+
+
 
 if __name__ == "__main__":
     FiestraPrincipal()
