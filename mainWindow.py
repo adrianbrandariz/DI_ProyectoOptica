@@ -77,8 +77,9 @@ class FiestraPrincipal ():
         # Botones Venta:
         newSale = builder.get_object("nuevaVentaButton")
         newSale.connect("clicked", self.on_newSale_clicked)
-        addNewProductToSale = builder.get_object("nuevaVentaProducto")
-        addNewProductToSale.connect("clicked", self.on_addNewProductToSale)
+        self.addNewProductToSale = builder.get_object("nuevaVentaProducto")
+        self.addNewProductToSale.connect("clicked", self.on_addNewProductToSale)
+        self.imprimirFacturaButton = builder.get_object("imprimirFacturaButton")
 
         # Componentes bloque permanente Cliente:
         self.nombreCliente = builder.get_object("nombreClienteText")
@@ -340,6 +341,10 @@ class FiestraPrincipal ():
 
     def generarNuevoIndicadorVenta(self):
         indicadores = self.cursor.execute("select indicador from ventas")
+        self.comboVentaCliente.set_active(-1)
+        self.sale = []
+        self.listmodel.clear()
+        self.treeView.set_model(self.listmodel)
         aux = "V"
         nuevoIndicador = "V1"
         for indicador in indicadores:
@@ -347,7 +352,9 @@ class FiestraPrincipal ():
         self.indicadorVenta.set_text(nuevoIndicador)
         self.comboVentaCliente.set_sensitive(True)
         self.comboVentaProducto.set_sensitive(True)
-        self.comboVentaCantidad.set_sensitive(True )
+        self.comboVentaCantidad.set_sensitive(True)
+        self.addNewProductToSale.set_sensitive(True)
+        self.imprimirFacturaButton.set_sensitive(False)
 
     def cargarCombosVentas(self):
         self.comboVentaCliente.remove_all()
@@ -360,6 +367,7 @@ class FiestraPrincipal ():
             self.comboVentaProducto.append_text(producto[0] + " - " + producto[1])
 
     def añadirVentaTreeView(self):
+        self.imprimirFacturaButton.set_sensitive(True)
         # Se necesita obtener para el treeView ["Referencia", "Descripcion del producto", "Cantidad", "Precio unitario"]
         referenciaProducto = self.comboVentaProducto.get_active_text().split(" - ")[0]
         descripcionProducto = self.comboVentaProducto.get_active_text().split(" - ")[1] + " - " + self.comboVentaProducto.get_active_text().split(" - ")[2]
