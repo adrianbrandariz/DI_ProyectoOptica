@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3768a06f-6b7b-45b0-8da3-5070ec00ffd5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mainWindow.glade" beforeDir="false" afterPath="$PROJECT_DIR$/mainWindow.glade" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainWindow.py" afterDir="false" />
     </list>
@@ -16,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2728">
-              <caret line="323" column="51" lean-forward="true" selection-start-line="323" selection-start-column="51" selection-end-line="323" selection-end-column="51" />
+            <state relative-caret-position="313">
+              <caret line="369" column="28" lean-forward="true" selection-start-line="369" selection-start-column="28" selection-end-line="369" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -43,9 +44,9 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="293" />
-    <option name="y" value="47" />
+    <option name="y" value="53" />
     <option name="width" value="1400" />
-    <option name="height" value="883" />
+    <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -59,7 +60,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -124,14 +125,14 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49508196" weight="0.32829374" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.47868854" weight="0.32829374" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50491804" side_tool="true" visible="true" weight="0.32829374" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.52131146" side_tool="true" visible="true" weight="0.32829374" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -156,8 +157,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mainWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2728">
-          <caret line="323" column="51" lean-forward="true" selection-start-line="323" selection-start-column="51" selection-end-line="323" selection-end-column="51" />
+        <state relative-caret-position="313">
+          <caret line="369" column="28" lean-forward="true" selection-start-line="369" selection-start-column="28" selection-end-line="369" selection-end-column="28" />
         </state>
       </provider>
     </entry>

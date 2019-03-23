@@ -110,6 +110,30 @@ class FiestraPrincipal ():
 
         # Componentes bloque Ventas:
         self.indicadorVenta = builder.get_object("indicadorVenta")
+        self.boxTreeView = builder.get_object("boxTreeView")
+        self.treeView = builder.get_object("treeView")
+
+        self.columns = ["Referencia",
+                   "Descripcion del producto",
+                   "Cantidad",
+                   "Precio unitario"]
+
+        self.sale = []
+        # the data in the model (three strings for each row, one for each
+        # column)
+        self.listmodel = Gtk.ListStore(str, str, int, float)
+        # append the values in the model
+        for i in range(len(self.sale)):
+            self.listmodel.append(self.sale[i])
+        self.treeView.set_model(self.listmodel)
+        # for each column
+        for i, column in enumerate(self.columns):
+            # cellrenderer to render the text
+            cell = Gtk.CellRendererText()
+            # the column is created
+            col = Gtk.TreeViewColumn(column, cell, text=i)
+            # and it is appended to the treeview
+            self.treeView.append_column(col)
 
         mainWindow.show()
 
@@ -310,6 +334,7 @@ class FiestraPrincipal ():
     def on_addNewProductToSale(self, control):
         if (self.comboVentaCantidad.get_active() > -1 and self.comboVentaProducto.get_active() > -1):
             self.comboVentaCliente.set_sensitive(False)
+            self.añadirVentaTreeView()
             self.comboVentaProducto.set_active(-1)
             self.comboVentaCantidad.set_active(-1)
 
@@ -333,6 +358,22 @@ class FiestraPrincipal ():
         productos = self.cursor.execute("select referencia, descripcion from productos")
         for producto in productos:
             self.comboVentaProducto.append_text(producto[0] + " - " + producto[1])
+
+    def añadirVentaTreeView(self):
+        # Se necesita obtener para el treeView ["Referencia", "Descripcion del producto", "Cantidad", "Precio unitario"]
+        referenciaProducto = self.comboVentaProducto.get_active_text().split(" - ")[0]
+        descripcionProducto = self.comboVentaProducto.get_active_text().split(" - ")[1] + " - " + self.comboVentaProducto.get_active_text().split(" - ")[2]
+        cantidadProducto = self.comboVentaCantidad.get_active_text()
+        precioUnitarioCursor = self.cursor.execute("select precio from productos where referencia='" + referenciaProducto + "'")
+        for precioUnitario in precioUnitarioCursor:
+            self.sale.append([referenciaProducto, descripcionProducto, int(cantidadProducto), float(precioUnitario[0])])
+            print(self.sale)
+        # append the values in the model
+        self.aux = []
+        for i in self.sale[len(self.sale) - 1]:
+            self.aux.append(i)
+        self.listmodel.append(self.aux)
+        self.treeView.set_model(self.listmodel)
 
 
 
