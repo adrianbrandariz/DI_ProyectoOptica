@@ -3,6 +3,11 @@ gi.require_version ('Gtk','3.0')
 
 from gi.repository import Gtk
 from sqlite3 import dbapi2
+from reportlab.platypus import (SimpleDocTemplate,PageBreak, Image,
+                                Spacer,Paragraph,Table,TableStyle)
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
 
 class FiestraPrincipal ():
 
@@ -16,6 +21,73 @@ class FiestraPrincipal ():
         builder = Gtk.Builder()
         builder.add_from_file("generadorFacturas.glade")
 
+        self.codigoVentaText = builder.get_object("codigoVentaText")
+        facturaSimpleButton = builder.get_object("facturaSimpleButton")
+        facturaSimpleButton.connect("clicked", self.on_facturaSimpleButton_clicked)
+        facturaDetalladaButton = builder.get_object("facturaDetalladaButton")
+        facturaDetalladaButton.connect("clicked", self.on_facturaDetalladaButton_clicked)
+
         mainWindow = builder.get_object("mainWindow")
 
         mainWindow.show()
+
+    def on_facturaSimpleButton_clicked(self, control):
+        # Se genera el contenido total de las tablas Cabezera+contenido consulta"""
+        facturaVenta = [['Nombre Producto', 'Cantidad', 'Precio Unidad', 'Precio Total']]
+        self.cursorAux = self.bbdd.cursor()
+        ventas = []
+        # Para factura simple se requiere el nombre del producto, cantidad del producto, precio unidad y precio total:
+        consulta = self.cursor.execute("select * from ventas where indicador='" + self.codigoVentaText.get_text() + "'")
+        for registro in consulta:
+            producto = self.cursorAux.execute("select descripcion, precio from productos where referencia='" + registro[3] + "'")
+            print(registro[3])
+            for detallesProducto in producto:
+                print("Descripcion: " + detallesProducto[0])
+                print("Precio: " + str(detallesProducto[1]))
+            print("Cantidad:" + str(registro[4]))
+            print("Precio total: " + str(detallesProducto[1] * registro[4]))
+            ventas.append([detallesProducto[0], registro[4], detallesProducto[1], (detallesProducto[1] * registro[4])])
+        for elemento in ventas:
+            facturaVenta.append(elemento)
+
+        self.i = 0
+        self.sumaTotal = 0
+        for registroVenta in facturaVenta:
+            if (self.i != 0):
+                print(registroVenta)
+                self.x = 0
+                for datoVenta in registroVenta:
+                    if (self.x == 3):
+                        self.sumaTotal = self.sumaTotal + datoVenta
+                    self.x = self.x + 1
+            self.i = self.i + 1
+        print(self.sumaTotal)
+        facturaVenta.append(["", "", "", self.sumaTotal])
+
+        doc = SimpleDocTemplate("FS_" + self.codigoVentaText.get_text() + "_" + registro[2] + ".pdf", pagesize=A4)
+        guion = []
+
+        tabla = Table(facturaVenta)
+        tabla.setStyle(TableStyle(
+            [
+                ('BACKGROUND', (0, 0), (-1, 0), colors.darkgreen),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('BOX', (0, 0), (-1, -1), 1, colors.black),
+                ('INNERGRID', (0, 0), (-1, -1), 1, colors.grey),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ]
+        ))
+
+        guion.append(tabla)
+
+        """Build del documento"""
+        doc.build(guion)
+
+
+
+    def on_facturaDetalladaButton_clicked(self, control):
+        hola = []
+
+if __name__ == "__main__":
+    FiestraPrincipal()
+    Gtk.main()
