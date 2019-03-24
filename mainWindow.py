@@ -2,8 +2,8 @@ import gi
 gi.require_version ('Gtk','3.0')
 
 from gi.repository import Gtk
+import GeneradorFacturas
 from sqlite3 import dbapi2
-
 class FiestraPrincipal ():
 
     def __init__(self):
@@ -350,7 +350,7 @@ class FiestraPrincipal ():
         self.addNewProductToSale.set_sensitive(False)
         self.listmodel.clear()
         self.treeView.set_model(self.listmodel)
-        self.imprimirFacturaButton.set_sensitive(False)
+        GeneradorFacturas.FiestraPrincipal()
 
     def generarNuevoIndicadorVenta(self):
         indicadores = self.cursor.execute("select indicador from ventas")
@@ -368,7 +368,6 @@ class FiestraPrincipal ():
         self.comboVentaProducto.set_sensitive(True)
         self.comboVentaCantidad.set_sensitive(True)
         self.addNewProductToSale.set_sensitive(True)
-        self.imprimirFacturaButton.set_sensitive(False)
 
     def cargarCombosVentas(self):
         self.comboVentaCliente.remove_all()
@@ -381,7 +380,6 @@ class FiestraPrincipal ():
             self.comboVentaProducto.append_text(producto[0] + " - " + producto[1])
 
     def añadirVentaTreeView(self):
-        self.imprimirFacturaButton.set_sensitive(True)
         # Se necesita obtener para el treeView ["Referencia", "Descripcion del producto", "Cantidad", "Precio unitario"]
         referenciaProducto = self.comboVentaProducto.get_active_text().split(" - ")[0]
         descripcionProducto = self.comboVentaProducto.get_active_text().split(" - ")[1] + " - " + self.comboVentaProducto.get_active_text().split(" - ")[2]

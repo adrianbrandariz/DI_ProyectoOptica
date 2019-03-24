@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3768a06f-6b7b-45b0-8da3-5070ec00ffd5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/bbdd.dat" beforeDir="false" afterPath="$PROJECT_DIR$/bbdd.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainWindow.glade" beforeDir="false" afterPath="$PROJECT_DIR$/mainWindow.glade" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainWindow.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="707">
-              <caret line="402" lean-forward="true" selection-start-line="402" selection-end-line="402" />
+            <state relative-caret-position="420">
+              <caret line="352" column="44" selection-start-line="352" selection-start-column="44" selection-end-line="352" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -37,6 +37,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/generadorfacturas.py" />
         <option value="$PROJECT_DIR$/mainWindow.py" />
       </list>
     </option>
@@ -53,8 +54,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -154,10 +155,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/generadorfacturas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mainWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
-          <caret line="402" lean-forward="true" selection-start-line="402" selection-end-line="402" />
+        <state relative-caret-position="420">
+          <caret line="352" column="44" selection-start-line="352" selection-start-column="44" selection-end-line="352" selection-end-column="44" />
         </state>
       </provider>
     </entry>
