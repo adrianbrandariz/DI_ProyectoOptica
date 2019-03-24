@@ -80,6 +80,7 @@ class FiestraPrincipal ():
         self.addNewProductToSale = builder.get_object("nuevaVentaProducto")
         self.addNewProductToSale.connect("clicked", self.on_addNewProductToSale)
         self.imprimirFacturaButton = builder.get_object("imprimirFacturaButton")
+        self.imprimirFacturaButton.connect("clicked", self.on_imprimirFacturaButton)
 
         # Componentes bloque permanente Cliente:
         self.nombreCliente = builder.get_object("nombreClienteText")
@@ -339,6 +340,18 @@ class FiestraPrincipal ():
             self.comboVentaProducto.set_active(-1)
             self.comboVentaCantidad.set_active(-1)
 
+    def on_imprimirFacturaButton(self, control):
+        # Se limpian los componentes de la pestaña de ventas:
+        self.indicadorVenta.set_text("")
+        self.comboVentaCliente.set_active(-1)
+        self.comboVentaProducto.set_active(-1)
+        self.comboVentaProducto.set_sensitive(False)
+        self.comboVentaCantidad.set_sensitive(False)
+        self.addNewProductToSale.set_sensitive(False)
+        self.listmodel.clear()
+        self.treeView.set_model(self.listmodel)
+        self.imprimirFacturaButton.set_sensitive(False)
+
     def generarNuevoIndicadorVenta(self):
         indicadores = self.cursor.execute("select indicador from ventas")
         self.comboVentaCliente.set_active(-1)
@@ -348,7 +361,8 @@ class FiestraPrincipal ():
         aux = "V"
         nuevoIndicador = "V1"
         for indicador in indicadores:
-            nuevoIndicador = aux + str(int(indicador[0].replace("V", "")) + 1)
+            if (nuevoIndicador == indicador[0]):
+                nuevoIndicador = aux + str(int(indicador[0].replace("V", "")) + 1)
         self.indicadorVenta.set_text(nuevoIndicador)
         self.comboVentaCliente.set_sensitive(True)
         self.comboVentaProducto.set_sensitive(True)
@@ -375,11 +389,14 @@ class FiestraPrincipal ():
         precioUnitarioCursor = self.cursor.execute("select precio from productos where referencia='" + referenciaProducto + "'")
         for precioUnitario in precioUnitarioCursor:
             self.sale.append([referenciaProducto, descripcionProducto, int(cantidadProducto), float(precioUnitario[0])])
-            print(self.sale)
         # append the values in the model
         self.aux = []
         for i in self.sale[len(self.sale) - 1]:
             self.aux.append(i)
+        indicadorConsulta = self.indicadorVenta.get_text()
+        dniCliente = self.comboVentaCliente.get_active_text().split(" - ")[0]
+        self.cursor.execute("insert into ventas (indicador, dnicliente, referenciaprod, cantidad) values ('" + indicadorConsulta + "', '" + dniCliente + "', '" + referenciaProducto + "', " + cantidadProducto + ")")
+        self.bbdd.commit()
         self.listmodel.append(self.aux)
         self.treeView.set_model(self.listmodel)
 
