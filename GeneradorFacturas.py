@@ -124,7 +124,7 @@ class FiestraPrincipal ():
                 print(registroVenta)
                 self.x = 0
                 for datoVenta in registroVenta:
-                    if (self.x == 3):
+                    if (self.x == 4):
                         self.sumaTotal = self.sumaTotal + datoVenta
                     self.x = self.x + 1
             self.i = self.i + 1
