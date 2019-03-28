@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3768a06f-6b7b-45b0-8da3-5070ec00ffd5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/FS_V1_53196369Z.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/FS_V1_53196369Z.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GeneradorFacturas.py" beforeDir="false" afterPath="$PROJECT_DIR$/GeneradorFacturas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FD_V1_53196369Z.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/FD_V1_53196369Z.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bbdd.dat" beforeDir="false" afterPath="$PROJECT_DIR$/bbdd.dat" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,13 +23,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GeneradorFacturas.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
+            <state relative-caret-position="15">
               <caret line="99" column="39" selection-start-line="99" selection-start-column="39" selection-end-line="99" selection-end-column="39" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/userguide.rst">
+          <provider selected="true" editor-type-id="restructured-text-editor" />
         </entry>
       </file>
     </leaf>
@@ -49,6 +55,7 @@
         <option value="$PROJECT_DIR$/generadorfacturas.py" />
         <option value="$PROJECT_DIR$/mainWindow.py" />
         <option value="$PROJECT_DIR$/GeneradorFacturas.py" />
+        <option value="$PROJECT_DIR$/userguide.rst" />
       </list>
     </option>
   </component>
@@ -64,6 +71,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -75,10 +83,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../test" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -203,10 +211,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GeneradorFacturas.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
+        <state relative-caret-position="15">
           <caret line="99" column="39" selection-start-line="99" selection-start-column="39" selection-end-line="99" selection-end-column="39" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/userguide.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
   </component>
 </project>
