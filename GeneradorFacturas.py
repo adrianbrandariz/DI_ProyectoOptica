@@ -86,7 +86,7 @@ class FiestraPrincipal ():
         doc.build(guion)
 
     def on_facturaDetalladaButton_clicked(self, control):
-        for datoCliente in self.cursor.execute("select dni, nombre, direccion from clientes where dni in (select dnicliente from ventas where indicador='V1')"):
+        for datoCliente in self.cursor.execute("select dni, nombre, direccion from clientes where dni in (select dnicliente from ventas where indicador='" + self.codigoVentaText.get_text() + "')"):
             self.dni = datoCliente[0]
             self.nombre = datoCliente[1]
             self.direccion = datoCliente[2]
@@ -124,7 +124,7 @@ class FiestraPrincipal ():
                 print(registroVenta)
                 self.x = 0
                 for datoVenta in registroVenta:
-                    if (self.x == 3):
+                    if (self.x == 4):
                         self.sumaTotal = self.sumaTotal + datoVenta
                     self.x = self.x + 1
             self.i = self.i + 1
